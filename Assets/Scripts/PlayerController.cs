@@ -5,6 +5,9 @@ public class PlayerController : MonoBehaviour {
 
 	public float speed = 10f;
 	public float padding = 1f;
+	public GameObject projectile;
+	public float projectileSpeed;
+	public float firingRate;
 
 	private float xMin;
 	private float xMax;
@@ -20,10 +23,25 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update () {
-		MoveSpaceship();
+		MoveSpaceshipIfClicked();
+		PlayerFireIfClicked();
 	}
 
-	void MoveSpaceship() {
+	void PlayerFireIfClicked() {
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			InvokeRepeating("Fire", 0.000001f, firingRate);//First parameter is method name. Second is the initial delay before first run if you put in zero, then it bugs. Third is repeat time.
+		}
+		if (Input.GetKeyUp (KeyCode.Space)) {
+			CancelInvoke();
+		}
+	}
+
+	void Fire() {
+		GameObject beam = Instantiate(projectile, transform.position, Quaternion.identity) as GameObject;
+		beam.GetComponent<Rigidbody2D>().velocity = new Vector3(0, projectileSpeed, 0);
+	}
+
+	void MoveSpaceshipIfClicked() {
 		if (Input.GetKey(KeyCode.LeftArrow)) {
 			transform.position += Vector3.left * speed * Time.deltaTime;//Default function to move to the left
 		} else if (Input.GetKey(KeyCode.RightArrow)) {
