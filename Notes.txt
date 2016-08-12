@@ -1,0 +1,2 @@
+We have problems with collisions between friendly targets and friendly bullets. In order to avoid that we can add layers.
+Add a new layer. After adding it go to Edit -> Project Settings -> Physics 2D. It allows you to select what collides with what.
