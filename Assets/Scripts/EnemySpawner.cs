@@ -14,16 +14,16 @@ public class EnemySpawner : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		float distanceToCamera = transform.position.z - Camera.main.transform.position.z;
-		Vector3 leftEdge = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, distanceToCamera));
-		Vector3 rightEdge = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, distanceToCamera));
+		GetFieldConstraints();
+		SpawnEnemies();
+	}
 
-		xMax = rightEdge.x;
-		xMin = leftEdge.x;
+	// Update is called once per frame
+	void Update () {
+		DirectMovement();
 
-		foreach (Transform child in transform) {
-			GameObject enemy = Instantiate(enemyPrefab, child.transform.position, Quaternion.identity) as GameObject; //Quaternion is for rotation. identity leaves it at the default.
-			enemy.transform.parent = child;
+		if (AreAllMembersDead()) {
+			SpawnEnemies();
 		}
 	}
 
@@ -31,14 +31,23 @@ public class EnemySpawner : MonoBehaviour {
 		Gizmos.DrawWireCube(transform.position, new Vector3 (width, height)); //Shows us where the formation is. Draws a cube around it.
 	}
 
-	// Update is called once per frame
-	void Update () {
-		if (movingRight) {
-			transform.position += Vector3.right * (speed * Time.deltaTime);
-		} else {
-			transform.position += Vector3.left * (speed * Time.deltaTime);
-		}
+	void GetFieldConstraints() {
+		float distanceToCamera = transform.position.z - Camera.main.transform.position.z;
+		Vector3 leftEdge = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, distanceToCamera));
+		Vector3 rightEdge = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, distanceToCamera));
 
+		xMax = rightEdge.x;
+		xMin = leftEdge.x;
+	}
+
+	void SpawnEnemies() {
+		foreach (Transform child in transform) {
+			GameObject enemy = Instantiate(enemyPrefab, child.transform.position, Quaternion.identity) as GameObject; //Quaternion is for rotation. identity leaves it at the default.
+			enemy.transform.parent = child;
+		}
+	}
+
+	void RestrictMovement() {
 		float rightEdgeOfFormation = transform.position.x + 0.5f * width;
 		float leftEdgeOfFormation = transform.position.x - 0.5f * width;
 
@@ -47,5 +56,25 @@ public class EnemySpawner : MonoBehaviour {
 		} else if (rightEdgeOfFormation > xMax) {
 			movingRight = false;
 		}
+	}
+
+	void DirectMovement() {
+		if (movingRight) {
+			transform.position += Vector3.right * (speed * Time.deltaTime);
+		} else {
+			transform.position += Vector3.left * (speed * Time.deltaTime);
+		}
+
+		RestrictMovement();
+	}
+
+	bool AreAllMembersDead() {
+		foreach (Transform childPositionGameObject in transform) { //transform of the gameObject holds the children.
+			if (childPositionGameObject.childCount > 0) { //If 0, then members are dead.
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
