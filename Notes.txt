@@ -1,2 +1,8 @@
 We have problems with collisions between friendly targets and friendly bullets. In order to avoid that we can add layers.
 Add a new layer. After adding it go to Edit -> Project Settings -> Physics 2D. It allows you to select what collides with what.
+
+In order to handle animations: click on your console, project etc. tab, add Animation. Once you create the animation in that window you get a timeline.
+Pressing on the red circle, you go into record mode. Since we chose position as a property to change, then we get points on the timeline referring to positions in time.
+Change the specific positions in time to edit the animation for its movement.
+You can do all sorts of things in the animator. Scripts, collision etc.
+You can use the Animator tab to combine many different animations.
