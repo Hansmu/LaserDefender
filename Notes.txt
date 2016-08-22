@@ -6,3 +6,6 @@ Pressing on the red circle, you go into record mode. Since we chose position as 
 Change the specific positions in time to edit the animation for its movement.
 You can do all sorts of things in the animator. Scripts, collision etc.
 You can use the Animator tab to combine many different animations.
+
+Rendering order. To modify it go to Edit -> Project Settings -> Tags And Layers. Select Sorting Layers. Add layers. To add a layer to a prefab go to the Sprite Renderer.
+The Sprite Renderer has a Sorting Layer property. The order in the Sorting Layers defines in which order the sprites are rendered.
